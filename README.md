@@ -12,3 +12,4 @@ Efficiency: Integrated load balancing mechanisms and bandwidth reservation ensur
 This multi-controller approach not only enhances network reliability and scalability but also ensures continuous operation even in case of controller failure. It's a significant step towards more resilient and efficient network management.
 
 I'm looking forward to hearing your thoughts on this approach! How do you handle load balancing and redundancy in your networks?
+![Screenshot 2024-07-14 224440](https://github.com/user-attachments/assets/afbd2530-a7b9-46c3-9d5a-c105d1d65644)
