@@ -1,0 +1,171 @@
+
+##############################################
+in different Briges
+##############################################
+
+Switch_1:
+
+	
+ip link set dev eth0 address 00:bb:bb:01:00:00
+ip link set dev eth1 address 00:bb:bb:01:01:00
+ip link set dev eth2 address 00:bb:bb:01:02:00
+ip link set dev eth3 address 00:bb:bb:01:03:00
+ip link set dev eth4 address 00:bb:bb:01:04:00
+ip link set dev eth5 address 00:bb:bb:01:05:00
+ip link set dev eth6 address 00:bb:bb:01:06:00
+ip link set dev eth7 address 00:bb:bb:01:07:00
+ip link set dev eth8 address 00:bb:bb:01:08:00
+ip link set dev eth9 address 00:bb:bb:01:09:00
+ip link set dev eth10 address 00:bb:bb:01:10:00
+ip link set dev eth11 address 00:bb:bb:01:11:00
+ip link set dev eth12 address 00:bb:bb:01:12:00
+ip link set dev eth13 address 00:bb:bb:01:13:00
+ip link set dev eth14 address 00:bb:bb:01:14:00
+ip link set dev eth15 address 00:bb:bb:01:15:00
+ovs-vsctl set-controller br0 tcp:10.0.0.101:3356 tcp:10.0.0.102:3399
+ovs-vsctl set Bridge br0 protocols=OpenFlow13
+ifconfig br0 10.0.0.110 netmask 255.0.0.0
+ifconfig br0 up
+ifconfig br1 down
+ifconfig br2 down
+ifconfig br3 down
+ifconfig eth3 down
+ifconfig eth4 down
+ifconfig eth5 down
+ifconfig eth13 down
+ifconfig eth7 down
+ifconfig eth8 down
+ifconfig eth14 down
+ifconfig eth2 down
+ifconfig eth10 down
+ifconfig eth9 down
+ovs-vsctl del-br br1
+ovs-vsctl del-br br2
+ovs-vsctl del-br br3
+ovs-vsctl del-port br0 eth14
+ovs-vsctl del-port br0 eth13
+ovs-vsctl del-port br0 eth9
+ovs-vsctl del-port br0 eth10
+ovs-vsctl del-port br0 eth8
+ovs-vsctl del-port br0 eth7
+ovs-vsctl del-port br0 eth5
+ovs-vsctl del-port br0 eth4
+ovs-vsctl del-port br0 eth3
+ovs-vsctl del-port br0 eth2
+
+
+
+Switch_2:
+
+
+ip link set dev eth0 address 00:bb:bb:02:00:00
+ip link set dev eth1 address 00:bb:bb:02:01:00
+ip link set dev eth2 address 00:bb:bb:02:02:00
+ip link set dev eth3 address 00:bb:bb:02:03:00
+ip link set dev eth4 address 00:bb:bb:02:04:00
+ip link set dev eth5 address 00:bb:bb:02:05:00
+ip link set dev eth6 address 00:bb:bb:02:06:00
+ip link set dev eth7 address 00:bb:bb:02:07:00
+ip link set dev eth8 address 00:bb:bb:02:08:00
+ip link set dev eth9 address 00:bb:bb:02:09:00
+ip link set dev eth10 address 00:bb:bb:02:10:00
+ip link set dev eth11 address 00:bb:bb:02:11:00
+ip link set dev eth12 address 00:bb:bb:02:12:00
+ip link set dev eth13 address 00:bb:bb:02:13:00
+ip link set dev eth14 address 00:bb:bb:02:14:00
+ip link set dev eth15 address 00:bb:bb:02:15:00
+ovs-vsctl set-controller br0 tcp:10.0.0.101:3356 tcp:10.0.0.102:3399
+ovs-vsctl set Bridge br0 protocols=OpenFlow13
+ifconfig br0 10.0.0.120 netmask 255.0.0.0
+ifconfig br0 up
+ifconfig br1 down
+ifconfig br2 down
+ifconfig br3 down
+ifconfig eth3 down
+ifconfig eth4 down
+ifconfig eth5 down
+ifconfig eth6 down
+ifconfig eth7 down
+ifconfig eth8 down
+ovs-vsctl del-br br1
+ovs-vsctl del-br br2
+ovs-vsctl del-br br3
+ovs-vsctl del-port br0 eth15
+ovs-vsctl del-port br0 eth12
+ovs-vsctl del-port br0 eth11
+ovs-vsctl del-port br0 eth10
+ovs-vsctl del-port br0 eth9
+ovs-vsctl del-port br0 eth8
+ovs-vsctl del-port br0 eth7
+ovs-vsctl del-port br0 eth6
+ovs-vsctl del-port br0 eth5
+ovs-vsctl del-port br0 eth4
+ovs-vsctl del-port br0 eth3
+ovs-vsctl del-port br0 eth2
+
+
+
+##############################################
+Controllers Configurations
+##############################################
+
+Controler_1:
+
+#Network_interfaces
+
+auto eth1
+iface eth1 inet static
+	address 10.0.0.101
+	netmask 255.0.0.0
+	gateway 10.0.0.1
+	up echo nameserver 10.0.0.1 > /etc/resolv.conf
+	hwaddress ether cc:cc:11::00:00
+   	 pre-up sysctl -w net.ipv6.conf.eth1.disable_ipv6=1
+
+ryu-manager --ofp-tcp-listen-port 3356 c1.py	 
+	 
+	 
+	 
+Controler_2:
+
+#Network_interfaces	 
+	 
+auto eth1
+iface eth1 inet static
+	address 10.0.0.102
+	netmask 255.0.0.0
+	gateway 10.0.0.1
+	up echo nameserver 10.0.0.1 > /etc/resolv.conf
+	hwaddress ether cc:cc:22::00:00
+   	 pre-up sysctl -w net.ipv6.conf.eth1.disable_ipv6=1
+	 
+ryu-manager --ofp-tcp-listen-port 3399 c2.py
+	 
+	 
+	 
+##############################################
+Host Configurations
+##############################################
+
+host configuration:
+	auto eth0
+	iface eth0 inet static
+		address 10.0.0.11
+		netmask 255.0.0.0
+		gateway 10.0.0.1
+		up echo nameserver 10.0.0.1 > /etc/resolv.conf
+		hwaddress ether 00:00:00:00:00:01 #make sure that you reboot the device 
+		# Disable IPv6 for eth0
+		pre-up sysctl -w net.ipv6.conf.eth0.disable_ipv6=1
+		
+		
+		
+
+
+##############################################
+GNS3 VM Configurations ==> Docker for the controller
+##############################################
+$ docker run -it --privileged -e DISPLAY=$DISPLAY \
+-v /tmp/.X11-unix:/tmp/.X11-unix \
+-v /lib/modules:/lib/modules \
+osrg/ryu-book
